@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>集客经营分析平台</title>
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="css/dcalendar.picker.css">
+
+<script src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/echarts.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="js/dcalendar.picker.js"></script>
+<script type="text/javascript" src="js/chartFormat.js"></script>
+<script type="text/javascript" src="js/queryDic.js"></script>
+<script type="text/javascript" src="js/macarons.js"></script>
+<script type="text/javascript" src="js/shine.js"></script>
+<script type="text/javascript" src="js/infographic.js"></script>
+
+<style>
+body {
+
+}
+.header {
+	height:30px;
+	background:url('image/headerbgmain.png')
+}
+.upload {
+	margin-top:10px;
+	padding:20px 0;
+	display:none;
+}
+.trend {
+	border-top:1px solid #eee;
+	padding-top:20px;
+	
+}
+</style>
+</head>
+<body>
+<div class="header">
+	<img src='image/logo.png' height=100%>
+</div>
+<div class="container">
+<div class="upload">
+<form action="importExcel" id="myform" name="myform" method="post"
+				enctype="multipart/form-data">
+				<input type="text" id="datepicker" name="datepicker" style="display:none;float:left;font-size:17px;width:120px;">
+					<input type="file" style="display:none" name="excelfile" id="excelfile" class="excelfile" onchange="document.getElementById('upfileResult').innerHTML=this.value"/>
+</form>
+<span style="float:left;margin-right:10px;line-height:34px;font-size:16px;">报表月份</span>
+<div class="btn-group" id="dategroup">
+  <button type="button" id="datebtn" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   201804&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>201801</a></li>
+    <li><a>201802</a></li>
+    <li><a>201803</a></li>
+    <li><a>201804</a></li>
+    <li><a>201805</a></li>
+    <li><a>201806</a></li>
+    <li><a>201807</a></li>
+    <li><a>201808</a></li>
+    <li><a>201809</a></li>
+    <li><a>201810</a></li>
+    <li><a>201811</a></li>
+    <li><a>201812</a></li>
+  </ul>
+</div>
+<button id="chooseFile" type="button" style="margin-left:20px;" class="btn btn-info">选择文件</button>
+<span class="tip" id="upfileResult" style="font-size:16px;display:inline-block;margin-left:10px; line-height:30px;color:red">选择xlsx后缀的excel文件</span>
+<button type="button" id="upload" style="margin-left:20px;" class="btn btn-info">&nbsp;上传&nbsp;</button>
+</div>
+<div class="trend">
+<h4 style="margin:10px 0 20px 0">分业务分省收入趋势统计</h4>
+<div class="btn-group" id="province">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    全国&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+   <li><a>全国</a></li>
+<li><a>北10</a></li>
+<li><a>南21</a></li>
+<li><a>北京</a></li>
+<li><a>天津</a></li>
+<li><a>河北</a></li>
+<li><a>山西</a></li>
+<li><a>内蒙古</a></li>
+<li><a>辽宁</a></li>
+<li><a>吉林</a></li>
+<li><a>黑龙江</a></li>
+<li><a>山东</a></li>
+<li><a>河南</a></li>
+<li><a>上海</a></li>
+<li><a>江苏</a></li>
+<li><a>浙江</a></li>
+<li><a>安徽</a></li>
+<li><a>福建</a></li>
+<li><a>江西</a></li>
+<li><a>湖北</a></li>
+<li><a>湖南</a></li>
+<li><a>广东</a></li>
+<li><a>广西</a></li>
+<li><a>海南</a></li>
+<li><a>重庆</a></li>
+<li><a>四川</a></li>
+<li><a>贵州</a></li>
+<li><a>云南</a></li>
+<li><a>西藏</a></li>
+<li><a>陕西</a></li>
+<li><a>甘肃</a></li>
+<li><a>青海</a></li>
+<li><a>宁夏</a></li>
+<li><a>新疆</a></li>
+<li><a>总部及子公司</a></li>
+  </ul>
+</div>
+<div class="btn-group" style="margin-left:10px;" id="subject">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    全部业务&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>全部业务</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a>新兴ICT</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;物联网</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;大数据</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;IT服务</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;IDC</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;云计算（含CDN）</a></li>
+     <li role="separator" class="divider"></li>
+    <li><a>移网基础业务</a></li>
+     <li role="separator" class="divider"></li>
+    <li><a>固网基础业务</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;互联网业务</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;固话</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;数据网元</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;分摊固网其他收入</a></li>
+  </ul>
+</div>
+<div class="btn-group" style="margin-left:10px;" id="zhibiao">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   当月收入&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>当月收入</a></li>
+    <li><a>同比增幅</a></li>
+  </ul>
+</div>
+<div id="trendChart" style="width: 100%;height:450px;padding: 20px;float:left;"></div>
+</div>
+
+<!--移动基础业务情况  -->
+<div class="trend" style="margin-top:450px;">
+<h4 style="margin:10px 0 20px 0">移动基础业务情况</h4>
+<div class="btn-group" style="margin-left:10px;" id="userSubject">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    当月主营收入&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>当月主营收入</a></li>
+    <li><a>出账用户</a></li>
+    <li><a>当月净增用户</a></li>
+    <li><a>累计净增用户</a></li>
+    <li><a>当月新发展用户</a></li>
+    <li><a>月流失用户</a></li>
+    <li><a>基础ARPU</a></li>
+  </ul>
+</div>
+<div class="btn-group" style="margin-left:10px;" id="userZhibiao">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  指标值&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>指标值</a></li>
+    <li><a>环比增幅</a></li>
+  </ul>
+</div>
+<div id="usertrendChart" style="width: 100%;height:450px;padding: 20px;float:left;"></div>
+</div>
+
+
+
+<div class="trend" style="margin-top:450px;">
+<h4 style="margin:10px 0 20px 0">各省收入情况对比</h4>
+<div class="btn-group" style="margin-left:10px;" id="subject3">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    全部业务&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>全部业务</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a>新兴ICT</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;物联网</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;大数据</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;IT服务</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;IDC</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;云计算（含CDN）</a></li>
+     <li role="separator" class="divider"></li>
+    <li><a>移网基础业务</a></li>
+     <li role="separator" class="divider"></li>
+    <li><a>固网基础业务</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;互联网业务</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;固话</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;数据网元</a></li>
+    <li><a>&nbsp;&nbsp;&nbsp;分摊固网其他收入</a></li>
+  </ul>
+</div>
+<div class="btn-group" style="margin-left:10px;" id="month">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   201804&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>201801</a></li>
+    <li><a>201802</a></li>
+    <li><a>201803</a></li>
+    <li><a>201804</a></li>
+    <li><a>201805</a></li>
+    <li><a>201806</a></li>
+    <li><a>201807</a></li>
+    <li><a>201808</a></li>
+    <li><a>201809</a></li>
+    <li><a>201810</a></li>
+    <li><a>201811</a></li>
+    <li><a>201812</a></li>
+  </ul>
+</div>
+<div id="provinceChart" style="width: 100%;height:550px;padding: 20px 0;float:left;"></div>
+</div>
+
+<div class="trend" style="margin-top:520px;">
+<h4 style="margin:10px 0 20px 0">分省收入占比及ARPU值情况统计</h4>
+<div class="btn-group" id="province2">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    全国&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+   <li><a>全国</a></li>
+<li><a>北10</a></li>
+<li><a>南21</a></li>
+<li><a>北京</a></li>
+<li><a>天津</a></li>
+<li><a>河北</a></li>
+<li><a>山西</a></li>
+<li><a>内蒙古</a></li>
+<li><a>辽宁</a></li>
+<li><a>吉林</a></li>
+<li><a>黑龙江</a></li>
+<li><a>山东</a></li>
+<li><a>河南</a></li>
+<li><a>上海</a></li>
+<li><a>江苏</a></li>
+<li><a>浙江</a></li>
+<li><a>安徽</a></li>
+<li><a>福建</a></li>
+<li><a>江西</a></li>
+<li><a>湖北</a></li>
+<li><a>湖南</a></li>
+<li><a>广东</a></li>
+<li><a>广西</a></li>
+<li><a>海南</a></li>
+<li><a>重庆</a></li>
+<li><a>四川</a></li>
+<li><a>贵州</a></li>
+<li><a>云南</a></li>
+<li><a>西藏</a></li>
+<li><a>陕西</a></li>
+<li><a>甘肃</a></li>
+<li><a>青海</a></li>
+<li><a>宁夏</a></li>
+<li><a>新疆</a></li>
+<li><a>总部及子公司</a></li>
+  </ul>
+</div>
+<div class="btn-group" style="margin-left:10px;" id="zhibiao2">
+  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   主营收入占比(当月)&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a>主营收入占比(当月)</a></li>
+    <li><a>主营收入ARPU</a></li>
+    <li><a>新兴ICT业务占大网比例（当月）</a></li>
+    <li><a>新兴ICT业务占集客整体收入比例</a></li>
+    <li><a>移动基础占集客整体收入比例</a></li>
+    <li><a>固网基础占集客整体收入比例</a></li>
+    <li><a>增量收入占公司大网增量收入的比值</a></li>
+  </ul>
+</div>
+<div id="trendChart2" style="width: 100%;height:450px;padding: 20px;float:left;"></div>
+</div>
+
+</div>
+</body>
+<script>
+function fix(num, length) {
+	return ('' + num).length < length ? ((new Array(length + 1)).join('0') + num).slice(-length) : '' + num;
+}
+$(document).ready(
+		function() {
+			var flag = 1;
+			$('#upload').click(function() {
+				if(flag == 2) {
+					return;
+				}
+				flag = 2;
+				$('#upload').text('报表解析中...')
+				$('#myform').submit();
+			})
+			
+			
+			var province = 0; //0 全国
+			var subject = 0;//主营业务
+			
+			
+			var userSubject = 1;
+			var userZhibiao = 1;
+		
+			var zhibiao = 1;//1:当月收入
+			var province2 = 0;
+			var zhibiao2 = 'zysrzb';
+			
+			var month = '201804';
+			var subject3 = 0;
+			
+			
+			var now = new Date();
+		    var str = now.getFullYear() + fix(now.getMonth(),2);
+			$("#datebtn" ).val('201804');
+			$("#datepicker" ).val('201804');
+			$(".dropdown-menu li").click(function() {
+				var parent = $(this).parent().parent();
+				var id = parent.attr('id')
+				var text = $(this).text().trim()
+				if(id == 'dategroup') {
+					$('#datepicker').val(text)
+				} else if(id == 'province') {
+					province = provinceDic[text]
+					dataQuery();
+				} else if(id == 'subject') {
+					subject = subjectDic[text]
+					dataQuery();
+				} else if(id == 'zhibiao') {
+					zhibiao = zhibiaoDic[text]
+					dataQuery();
+				} else if(id == 'province2') {
+					province2 = provinceDic[text]
+					dataQuery2();
+				} else if(id == 'zhibiao2') {
+					zhibiao2 = zhibiao2Dic[text]
+					dataQuery2();
+				} else if(id == 'subject3') {
+					subject3 = subjectDic[text]
+					provinceData();
+				} else if(id == 'month') {
+					month = text
+					provinceData();
+				} else if(id == 'userProvince') {
+					userProvince = provinceDic[text]
+					userDataQuery();
+				} else if(id == 'userSubject') {
+					userSubject = userSubjectDic[text]
+					userDataQuery();
+				} else if(id == 'userZhibiao') {
+					userZhibiao = userZhibiaoDic[text]
+					userDataQuery();
+				}
+				$(parent).find('button').html($(this).text().trim() + '&nbsp;<span class="caret"></span>')
+			})
+			
+			$('#chooseFile').click(function() {
+				$('#excelfile').click()
+			})
+			
+			var provinceData = function() {
+				$.ajax({
+					   type:"get",//请求方式
+					   url:"/JKJY/provinceData",//发送请求地址
+					   dataType: "json",
+					   data:{//发送给数据库的数据
+						   subject:subject3,
+						   month:month
+					   },
+					   //请求成功后的回调函数有两个参数
+					   success:function(data){
+						   var myChart = echarts.init(document.getElementById("provinceChart"),'macarons');
+						   var optiontmp = provinceOption;
+						   optiontmp.series[0].data = data.provinceIncomes;
+						   optiontmp.series[1].data = data.provinceTBs;
+						   myChart.setOption(optiontmp);
+					   },error:function(e) {
+						   alert("error");
+					   }
+					   })
+			}
+			var userDataQuery = function() {
+				$.ajax({
+					   type:"get",//请求方式
+					   url:"/JKJY/userDataQuery",//发送请求地址
+					   dataType: "json",
+					   data:{//发送给数据库的数据
+						   userSubject:userSubject,
+						   userZhibiao: userZhibiao
+					   },
+					   //请求成功后的回调函数有两个参数
+					   success:function(data){
+						   var myChart = echarts.init(document.getElementById("usertrendChart"),'macarons');
+						   var optiontmp = option;
+						   if(userZhibiao == '1') {
+							   if(userSubject == 7) {
+								   optiontmp.title.subtext = '单位（元）'
+									   optiontmp.title.text = 'ARPU值'
+						   		} else if(userSubject == 1) {
+							   		optiontmp.title.subtext = '单位（亿元）'
+									optiontmp.title.text = '当月收入'  
+						   		} else {
+						   			optiontmp.title.subtext = '单位（万户）'
+										optiontmp.title.text = '用户数'  
+						   		}
+						   } else if(userZhibiao == '2') {
+							   optiontmp = optionTB;
+							   optiontmp.title.text = '环比增幅'
+						   }
+						   optiontmp.series[0].data = data.list2017;
+						   optiontmp.series[1].data = data.list2018;
+						   myChart.setOption(optiontmp);
+					   },error:function(e) {
+						   alert("error");
+					   }
+					   })
+			}
+			
+			var dataQuery = function() {
+				$.ajax({
+					   type:"get",//请求方式
+					   url:"/JKJY/trendQuery",//发送请求地址
+					   dataType: "json",
+					   data:{//发送给数据库的数据
+						   province:province,
+						   subject:subject,
+						   zhibiao:zhibiao
+					   },
+					   //请求成功后的回调函数有两个参数
+					   success:function(data){
+						   var myChart = echarts.init(document.getElementById("trendChart"),'macarons');
+						   var optiontmp = option;
+						   if(zhibiao == '1') {
+							   if(province == '0') {
+								   optiontmp.title.subtext = '单位（亿元）'
+							   } else {
+								   optiontmp.title.subtext = '单位（万元）'
+							   }
+							   optiontmp.title.text = '当月收入'
+						   } else if(zhibiao == '2') {
+							   optiontmp = optionTB;
+							   optiontmp.title.text = '同比增幅'
+						   }
+						   optiontmp.series[0].data = data.list2017;
+						   optiontmp.series[1].data = data.list2018;
+						   myChart.setOption(optiontmp);
+					   },error:function(e) {
+						   alert("error");
+					   }
+					   })
+			}
+			
+			var dataQuery2 = function() {
+				$.ajax({
+					   type:"get",//请求方式
+					   url:"/JKJY/trendQuery2",//发送请求地址
+					   dataType: "json",
+					   data:{//发送给数据库的数据
+						   province:province2,
+						   zhibiao:zhibiao2
+					   },
+					   //请求成功后的回调函数有两个参数
+					   success:function(data){
+						   var myChart = echarts.init(document.getElementById("trendChart2"),'macarons');
+						   var optiontmp = option;
+						   if(zhibiao2 == 'ARPU') {
+							   optiontmp.title.text = '主营收入ARPU'
+							   optiontmp.title.subtext = '单位（万元）'
+						   } else {
+							   optiontmp = optionTB;
+							   if(zhibiao2 == 'zysrzb') {
+								   optiontmp.title.text = '主营收入占比(当月)'
+							   } else if(zhibiao2 == 'cxywzdw') {
+								   optiontmp.title.text = '新兴ICT业务占大网比例（当月）'
+							   } else if(zhibiao2 == 'cxywzjk') {
+								   optiontmp.title.text = '新兴ICT业务占集客整体收入比例'
+							   } else if(zhibiao2 == 'ydjczjk') {
+								   optiontmp.title.text = '移动基础占集客整体收入比例'
+							   } else if(zhibiao2 == 'gwjczjk') {
+								   optiontmp.title.text = '固网基础占集客整体收入比例'
+							   } else if(zhibiao2 == 'zlsrzdw') {
+								   optiontmp.title.text = '增量收入占公司大网增量收入的比值'
+							   }
+						   }
+						   
+						   optiontmp.series[0].data = data.list2017;
+						   optiontmp.series[1].data = data.list2018;
+						   myChart.setOption(optiontmp);
+					   },error:function(e) {
+						   alert("error");
+					   }
+					   })
+			}
+			
+			dataQuery();
+			dataQuery2();
+			provinceData();
+			userDataQuery();
+		})
+</script>
+</html>

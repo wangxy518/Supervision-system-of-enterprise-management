@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<title></title>
+
+<style>
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>
+</head>
+<body>
+<div id="app">
+  {{ message }}
+  {{ Date.now() }}
+</div>
+<div id="app-2">
+  <span v-bind:title="message">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+</div>
+
+<div id="app-3">
+  <p v-if="seen">现在你看到我了</p>
+</div>
+
+<div id="app-4">
+  <ol>
+    <li v-for="todo in todos">
+      {{ todo.text }}
+    </li>
+  </ol>
+</div>
+
+<div id="app-5">
+  <p>{{ message }}</p>
+  <button v-on:click="reverseMessage">逆转消息</button>
+</div>
+
+<div id="app-6">
+  <p>{{ message }}</p>
+  <input v-model="message">
+</div>
+
+<div id="app-7">
+  <!-- 创建一个 todo-item 组件的实例 -->
+  <todo-item v-for="item in groceryList"
+      v-bind:todo="item"
+      v-bind:key="item.id"></todo-item>
+</div>
+
+<div id="checkbox">
+<input type="checkbox" v-model="checked">
+<label for="checked">{{ checked }}</label>
+</div>
+
+<div id='example-3'>
+  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+  <label for="jack">Jack</label>
+  <input type="checkbox" id="john" value="John" v-model="checkedNames">
+  <label for="john">John</label>
+  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+  <label for="mike">Mike</label>
+  <br>
+  <span>Checked names: {{ checkedNames }}</span>
+</div>
+
+<div id="example-5">
+  <select v-model="selected">
+    <option disabled value="">请选择</option>
+    <option>A</option>
+    <option>B</option>
+    <option>C</option>
+  </select>
+  <span>Selected: {{ selected }}</span>
+</div>
+
+<input v-model.number="age" type="number">
+<input v-model.trim="msg">
+
+
+<div id="components-demo">
+  <button-counter initcount=10></button-counter>
+</div>
+
+<div id="example-css">
+  <button @click="show = !show">
+    Toggle render
+  </button>
+  <transition name="slide-fade">
+    <p v-if="show">hello</p>
+  </transition>
+</div>
+
+<div id="example-css2">
+  <button @click="show = !show">Toggle show</button>
+  <transition name="bounce">
+    <p v-if="show">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
+  </transition>
+</div>
+
+<script>
+new Vue({
+	  el: '#example-css2',
+	  data: {
+	    show: true
+	  }
+	})
+	
+new Vue({
+	  el: '#example-css',
+	  data: {
+	    show: true
+	  }
+	})
+//定义一个名为 button-counter 的新组件
+Vue.component('button-counter', {
+	props:['initcount'],
+	data: function () {
+		  return {
+		    count: this.initcount
+		  }
+		},
+  template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+})
+
+new Vue({
+	el:'#components-demo',
+	
+})
+
+new Vue({
+	  el: '#example-5',
+	  data: {
+		selected:'A'
+	  }
+	})
+	
+new Vue({
+	  el: '#example-3',
+	  data: {
+	    checkedNames: []
+	  }
+	})
+	
+new Vue({
+	  el: '#checkbox',
+	  data:{
+		  checked:false
+	  }
+	})
+	
+var app = new Vue({
+	  el: '#app',
+	  data: {
+	    message: Date.now()
+	  }
+	})
+var app2 = new Vue({
+	el:'#app-2',
+	data :{
+		message: '页面加载于 ' + new Date().toLocaleString()
+	}
+})
+
+var app3 = new Vue({
+	el:'#app-3',
+	data: {
+		seen:false
+	}
+})
+
+var app4 = new Vue({
+	  el: '#app-4',
+	  data: {
+	    todos: [
+	      { text: '学习 JavaScript' },
+	      { text: '学习 Vue' },
+	      { text: '整个牛项目' }
+	    ]
+	  }
+	})
+	
+var app5 = new Vue({
+	  el: '#app-5',
+	  data: {
+	    message: 'Hello Vue.js!'
+	  },
+	  methods: {
+	    reverseMessage: function () {
+	      this.message = this.message.split('').reverse().join('')
+	    }
+	  }
+	})
+
+var app6 = new Vue({
+	  el: '#app-6',
+	  data: {
+	    message: 'Hello Vue!'
+	  }
+	})
+	
+Vue.component('todo-item', {
+	props: ['todo'],
+	template: '<li>{{ todo.text }}</li>'
+})
+
+var app7 = new Vue({
+  el: '#app-7',
+  data: {
+    groceryList: [
+      { id: 0, text: '蔬菜' },
+      { id: 1, text: '奶酪' },
+      { id: 2, text: '随便其它什么人吃的东西' }
+    ]
+  }
+})
+
+</script>
+
+
+
+</body>
+</html>
